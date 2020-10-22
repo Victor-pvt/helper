@@ -4,9 +4,7 @@
     "description": "helper manager bundle",
     "license": "proprietary",
     "require": {
-        "php": ">=5.5.9",
-        "ext-ctype": "*",
-        "ext-iconv": "*"
+        "php": ">=7.1.3"
     },
     "config": {
         "preferred-install": {
