@@ -6,7 +6,7 @@
  * Time: 17:32
  */
 
-namespace ContentManager\DependencyInjection;
+namespace HelperManager\DependencyInjection;
 
 
 use Symfony\Component\Config\FileLocator;
