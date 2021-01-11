@@ -27,7 +27,7 @@ class HelperManagerExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
 
-        $exporterConfig = isset($config['helper']) ? $config['helper'] : array();
-        $container->setParameter('helper.exporter_config', $exporterConfig);
+        $exporterConfig = isset($config['logger']) ? $config['logger'] : null;
+        $container->setParameter('helper.logger', $exporterConfig);
     }
 }

@@ -31,11 +31,12 @@ class _ExtendedConsoleCommand extends ContainerAwareCommand
 		$this->output = $output;
 		$this->io = new SymfonyStyle($input, $output);
 		$id = getmypid();
-        $ymTime = $this->startExecute($id);
+        $isLogger = $this->getContainer()->getParameter('helper.logger');
+        $ymTime = $this->startExecute($id,$isLogger);
 
 		$this->runCommand();
 
-        $this->finishExecute($ymTime,$id);
+        $this->finishExecute($ymTime,$id,$isLogger);
 
         return self::COMMAND_SUCCESS_CODE;
 	}
@@ -49,7 +50,7 @@ class _ExtendedConsoleCommand extends ContainerAwareCommand
      * $ymTime = $this->startExecute($output);
      * @return mixed
      */
-    protected function startExecute($id)
+    protected function startExecute($id,$isLogger)
     {
         $ymTime = microtime(true);
         $this->io->writeln('start process ' . DateTimeHelper::getDateString());
@@ -65,7 +66,7 @@ class _ExtendedConsoleCommand extends ContainerAwareCommand
             $args = implode(',',$_args);
         }
         $message = " start process: {$id}, " . static::$defaultName . ', '.$args;
-        LogHelper::getInstance('console-command','m')->setStr($message);
+        $isLogger ? LogHelper::getInstance('console-command','m')->setStr($message) : null;
 
         return $ymTime;
     }
@@ -75,12 +76,12 @@ class _ExtendedConsoleCommand extends ContainerAwareCommand
      * @param $ymTime
      * @param $id
      */
-    protected function finishExecute($ymTime,$id)
+    protected function finishExecute($ymTime,$id,$isLogger)
     {
         $ymTime = (string)DateTimeHelper::s2t(microtime(true) - $ymTime);
         $this->io->writeln("Затрачено время " . $ymTime);
         $this->io->writeln('finish process ' . DateTimeHelper::getDateString());
         $message = "finish process: {$id}, " . static::$defaultName.', время работы ' . $ymTime;
-        LogHelper::getInstance('console-command','m')->setStr($message);
+        $isLogger ? LogHelper::getInstance('console-command','m')->setStr($message) : null;
     }
 }
