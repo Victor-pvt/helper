@@ -8,12 +8,14 @@
 
 namespace HelperManager\Helper;
 
+use Exception;
 /**
  * Class TranslitNameHelper
  * @package HelperManager\Helper
  */
 class TranslitNameHelper
 {
+    protected static $headerHttp;
     /**
      * @param string $file
      * @return boolean
@@ -157,5 +159,41 @@ class TranslitNameHelper
         $out = json_encode($array, JSON_UNESCAPED_UNICODE);
 
         return $out;
+    }
+    static public function isAbsoluteImageType($fullname)
+    {
+        try {
+            $isAccept = [IMAGETYPE_JPEG,IMAGETYPE_PNG, IMAGETYPE_TIFF_II, IMAGETYPE_BMP, IMAGETYPE_TIFF_MM];
+            if(in_array(exif_imagetype($fullname), $isAccept)){
+
+                return true;
+            }
+
+            return false;
+        } catch (\Exception $e) {
+
+            return false;
+        }
+    }
+
+    public static function checkHTTPLink($link)
+    {
+        if($link){
+            if(!static::$headerHttp){
+                try{
+                    static::$headerHttp = get_headers($link);
+                }catch (Exception $e){
+
+                    return false;
+                }
+            }
+            $status = static::$headerHttp ;
+            if((in_array("HTTP/1.1 200 OK", $status) or in_array("HTTP/1.0 200 OK", $status)) and !in_array("HTTP/1.1 301 Moved Permanently", $status)){
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }
