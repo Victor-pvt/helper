@@ -159,7 +159,13 @@ class TranslitNameHelper
 
         return $out;
     }
- static public function isAbsoluteImageType($fullname)
+
+    /**
+     * проверка ссылки на картинку
+     * @param $fullname
+     * @return bool
+     */
+    static public function isAbsoluteImageType($fullname)
     {
         try {
             $isAccept = [IMAGETYPE_JPEG,IMAGETYPE_PNG, IMAGETYPE_TIFF_II, IMAGETYPE_BMP, IMAGETYPE_TIFF_MM];
@@ -176,7 +182,7 @@ class TranslitNameHelper
     }
 
     /**
-     * проверка ссылки на картинку
+     * проверка ссылки
      * @param $link
      * @return bool
      */
