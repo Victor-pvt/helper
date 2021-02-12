@@ -8,6 +8,7 @@
 
 namespace HelperManager\Helper;
 
+use Exception;
 /**
  * Class TranslitNameHelper
  * @package HelperManager\Helper
@@ -157,5 +158,69 @@ class TranslitNameHelper
         $out = json_encode($array, JSON_UNESCAPED_UNICODE);
 
         return $out;
+    }
+ static public function isAbsoluteImageType($fullname)
+    {
+        try {
+            $isAccept = [IMAGETYPE_JPEG,IMAGETYPE_PNG, IMAGETYPE_TIFF_II, IMAGETYPE_BMP, IMAGETYPE_TIFF_MM];
+            if(in_array(exif_imagetype($fullname), $isAccept)){
+
+                return true;
+            }
+
+            return false;
+        } catch (\Exception $e) {
+
+            return false;
+        }
+    }
+
+    /**
+     * проверка ссылки на картинку
+     * @param $link
+     * @return bool
+     */
+    public static function checkHTTPLink($link)
+    {
+        if($link){
+            try{
+                $headerHttp = get_headers($link);
+            }catch (Exception $e){
+
+                return false;
+            }
+            $status = $headerHttp ;
+            if((in_array("HTTP/1.1 200 OK", $status) or in_array("HTTP/1.0 200 OK", $status)) and !in_array("HTTP/1.1 301 Moved Permanently", $status)){
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * проверка ссылки на ютуб
+     * @param $link
+     * @return bool
+     */
+    public static function checkYoutubeLink($link)
+    {
+        if($link){
+            $link = 'https://www.youtube.com/oembed?format=json&url='.$link;
+            try{
+                $headerHttp = get_headers($link);
+            }catch (Exception $e){
+
+                return false;
+            }
+            if(is_array($headerHttp)) preg_match('/^HTTP\\/\\d+\\.\\d+\\s+2\\d\\d\\s+.*$/', $headerHttp[0]);
+            $errFlag = (strpos($headerHttp[0], '200') ? '200' : '404');
+            if($errFlag==200){
+                return true;
+            }
+        }
+
+        return false;
     }
 }
