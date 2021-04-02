@@ -229,4 +229,14 @@ class TranslitNameHelper
 
         return false;
     }
+    static public function arrayToString($in)
+    {
+        if (is_array($in)) {
+
+            return "'" . join("','", $in) . "'";
+        } else {
+
+            return null;
+        }
+    }
 }
