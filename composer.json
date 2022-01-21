@@ -24,8 +24,7 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
-            "require": "4.4.*"
+            "allow-contrib": false
         }
     }
 }
