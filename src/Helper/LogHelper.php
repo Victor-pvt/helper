@@ -13,7 +13,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LogHelper
 {
-    const PATH_LOGS = 'var/log';
     protected static $logName = null;
     /** @var LogHelper */
     private static $instance = null;
@@ -36,7 +35,7 @@ class LogHelper
             static::$instance = new LogHelper();
         }
         $container = static::getContainer();
-        $logDir = realpath($container->getParameter('kernel.project_dir')) . '/' . self::PATH_LOGS;
+        $logDir = $container->getParameter('kernel.logs_dir');
         $dateLog = DateTimeHelper::getDateStringLog($timeFormat);
         if (static::$logName === null) {
             static::$prefix = $logDir . '/' . $dateLog;
